@@ -7,7 +7,7 @@ const navigationItems = [
 function Navbar() {
   return (
     <nav className="border-b border-black/15" aria-label="Navegación principal">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:w-[92%] lg:px-0">
         <a className="text-sm font-black tracking-[-0.04em]" href="#today">HABITTRACK</a>
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-[0.65rem] font-bold tracking-[0.14em] text-black/55 sm:gap-x-8">
           {navigationItems.map((item) => (
