@@ -1,0 +1,46 @@
+---
+import Navbar from '../components/Navbar'
+import UserCard from '../components/UserCard'
+import HabitTracker from '../components/HabitTracker'
+import '../styles/global.css'
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>HabitTrack</title>
+  </head>
+  <body>
+    <div class="min-h-screen bg-[#efede6] font-sans text-[#111111]">
+      <Navbar />
+      <main class="mx-auto w-full max-w-[1600px] px-5 sm:px-8 lg:w-[92%] lg:px-0" id="today">
+        <header class="grid min-h-[50svh] items-end gap-10 border-b border-black/15 py-14 sm:min-h-[52svh] sm:py-20 lg:grid-cols-[1fr_24rem] lg:gap-16">
+          <div>
+            <p class="text-[0.65rem] font-bold tracking-[0.2em] text-[#ff5a00]">DAILY / HABITS / TRACKER</p>
+            <h1 class="mt-7 text-[clamp(5rem,16vw,13rem)] font-black leading-[0.72] tracking-[-0.09em]">HABIT<br /><span class="text-[#ff5a00]">TRACK.</span></h1>
+          </div>
+          <p class="max-w-xs border-l border-black/25 pl-5 text-sm leading-relaxed text-black/65">Un espacio visual para seguir hábitos, props y estado desde una interfaz simple.</p>
+        </header>
+        <section class="grid gap-8 border-b border-black/15 py-16 sm:py-20 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)] lg:gap-16" id="user" aria-labelledby="user-title">
+          <div>
+            <p class="text-[0.65rem] font-bold tracking-[0.2em] text-[#ff5a00]">01 / USER</p>
+            <h2 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl" id="user-title">Perfil enviado<br />por props.</h2>
+          </div>
+          <div>
+            <p class="mb-7 max-w-md text-sm leading-relaxed text-black/60">Datos enviados a un componente reutilizable mediante props.</p>
+            <UserCard nombre="Carlos Cerda" objetivo="Construir mejores hábitos" />
+          </div>
+        </section>
+        <div class="pb-20">
+          <HabitTracker client:load />
+        </div>
+        <footer class="flex flex-col gap-2 border-t border-black/15 py-7 text-[0.65rem] font-bold tracking-[0.16em] text-black/50 sm:flex-row sm:justify-between">
+          <span>HABITTRACK / 2026</span>
+          <span>REACT / TYPESCRIPT / TAILWIND</span>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
