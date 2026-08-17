@@ -1,32 +1,85 @@
-# React + TypeScript + Vite
+# HabitTrack
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+HabitTrack es una aplicación de seguimiento de hábitos diarios. Presenta componentes reutilizables, props tipadas y estado local de React dentro de una página Astro con diseño editorial y Tailwind CSS v4.
 
-Currently, two official plugins are available:
+## Objetivo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Demostrar React, TypeScript, props, `useState`, Tailwind CSS v4, Astro y React Islands sin backend, autenticación ni almacenamiento permanente.
 
-## React Compiler
+## Stack Tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Astro
+- React y React Islands
+- TypeScript estricto
+- Tailwind CSS v4 con `@tailwindcss/vite`
+- Oxlint
+- GitHub y Vercel
 
-## Expanding the Oxlint configuration
+## Arquitectura
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Astro controla la estructura de la página mediante `Layout.astro` e `index.astro`. Los componentes estáticos React se renderizan en servidor. `HabitTracker` usa `client:load` porque contiene el estado y los eventos del usuario.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Estructura
+
+```text
+src/
+├── components/
+│   ├── Button.tsx
+│   ├── Card.tsx
+│   ├── HabitForm.tsx
+│   ├── HabitTracker.tsx
+│   ├── Header.tsx
+│   ├── Hero.tsx
+│   └── UserCard.tsx
+├── layouts/
+│   └── Layout.astro
+├── pages/
+│   └── index.astro
+└── styles/
+    └── global.css
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Componentes y TypeScript
+
+- `Header` y `Hero` son componentes React estáticos.
+- `UserCard` recibe `nombre` y `objetivo` mediante `UserCardProps`.
+- `Card` recibe las props de cada hábito y usa `HabitVariant` (`blue`, `orange`, `green`).
+- `Button` recibe texto y callback tipados.
+- `HabitForm` recibe `HabitFormProps` y usa `HabitFormValues` para añadir hábitos.
+
+`HabitTracker` administra un único `useState<Habit[]>`. El contador y el porcentaje de progreso se derivan de ese estado. Los toggles y los nuevos hábitos actualizan el array de forma inmutable.
+
+## React Islands
+
+`src/pages/index.astro` hidrata únicamente:
+
+```astro
+<HabitTracker client:load />
+```
+
+`Header`, `Hero` y `UserCard` se renderizan sin una directiva `client:*`.
+
+## Estilos
+
+Tailwind CSS v4 es el motor principal. `src/styles/global.css` define las variables `--color-background`, `--color-surface`, `--color-text`, `--color-muted`, `--color-accent` y `--color-border` para mantener la identidad visual.
+
+## Comandos
+
+```bash
+npm install
+npm run dev
+npm run check
+npm run lint
+npm run build
+npm run preview
+```
+
+## Git Workflow
+
+- `feature/habittrack-ui` se integró mediante Pull Request #1.
+- `feature/astro-integration` se integró mediante Pull Request #2.
+- `feature/final-compliance` reúne los ajustes finales de cumplimiento técnico.
+
+## Despliegue
+
+El proyecto utiliza GitHub para el flujo de código y Vercel para el despliegue.

@@ -4,7 +4,7 @@ export type HabitVariant = 'blue' | 'orange' | 'green'
 
 const variantStyles: Record<HabitVariant, string> = {
   blue: 'bg-[#3478f6]',
-  orange: 'bg-[#ff5a00]',
+  orange: 'bg-[var(--color-accent)]',
   green: 'bg-[#2f9d62]',
 }
 
@@ -22,12 +22,12 @@ function Card({ titulo, descripcion, frecuencia, completado, variant, onToggle }
   const textoBoton = completado ? 'MARCAR COMO PENDIENTE' : 'MARCAR COMO COMPLETADO'
 
   return (
-    <article className={`flex h-full flex-col justify-between border bg-[#f5f3ed] p-6 transition-colors sm:p-7 ${completado ? 'border-[#ff5a00]' : 'border-black/20'}`} data-variant={variant}>
+    <article className={`flex h-full flex-col justify-between border bg-[var(--color-surface)] p-6 transition-colors sm:p-7 ${completado ? 'border-[var(--color-accent)]' : 'border-[var(--color-border)]'}`} data-variant={variant}>
       <div>
         <div className="flex items-center justify-between gap-3 text-[0.6rem] font-bold tracking-[0.16em]">
           <span className="text-black/50">HABIT / CARD</span>
-          <span className={completado ? 'flex items-center gap-1.5 text-[#ff5a00]' : 'flex items-center gap-1.5 text-black/45'}>
-            <span aria-hidden="true" className={`size-1.5 rounded-full ${completado ? 'bg-[#ff5a00]' : variantStyles[variant]}`} />
+          <span className={completado ? 'flex items-center gap-1.5 text-[var(--color-accent)]' : 'flex items-center gap-1.5 text-black/45'}>
+            <span aria-hidden="true" className={`size-1.5 rounded-full ${completado ? 'bg-[var(--color-accent)]' : variantStyles[variant]}`} />
             {completado ? 'ACTIVE' : 'INACTIVE'}
           </span>
         </div>
@@ -41,7 +41,7 @@ function Card({ titulo, descripcion, frecuencia, completado, variant, onToggle }
         <p className="mt-4 text-sm leading-relaxed text-black/60">{descripcion}</p>
       </div>
       <div className="mt-12 flex flex-col gap-4 border-t border-black/15 pt-4 sm:flex-row sm:items-center sm:justify-between">
-        <span className={completado ? 'text-[0.65rem] font-bold tracking-[0.14em] text-[#ff5a00]' : 'text-[0.65rem] font-bold tracking-[0.14em] text-black/45'}>
+        <span className={completado ? 'text-[0.65rem] font-bold tracking-[0.14em] text-[var(--color-accent)]' : 'text-[0.65rem] font-bold tracking-[0.14em] text-black/45'}>
           {estado}
         </span>
         <Button texto={textoBoton} onClick={onToggle} />
