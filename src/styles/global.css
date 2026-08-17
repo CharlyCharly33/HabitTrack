@@ -1,15 +1,24 @@
 @import "tailwindcss";
 
+:root {
+  --color-background: #efede6;
+  --color-surface: #f5f3ed;
+  --color-text: #111111;
+  --color-muted: #6b6a66;
+  --color-accent: #ff5a00;
+  --color-border: rgb(17 17 17 / 15%);
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   min-width: 320px;
-  background: #efede6;
+  background: var(--color-background);
 }
 
 ::selection {
   color: #ffffff;
-  background: #ff5a00;
+  background: var(--color-accent);
 }

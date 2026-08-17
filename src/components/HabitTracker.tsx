@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Card, { type HabitVariant } from './Card'
+import HabitForm, { type HabitFormValues } from './HabitForm'
 
 interface Habit {
   id: number
@@ -30,17 +31,25 @@ function HabitTracker() {
     )
   }
 
+  function addHabit(habit: HabitFormValues) {
+    setHabits((currentHabits) => [
+      ...currentHabits,
+      { ...habit, id: Date.now(), completado: false },
+    ])
+  }
+
   return (
     <>
       <section className="border-b border-black/15 py-16 sm:py-20" id="habits" aria-labelledby="habits-title">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
           <div>
-            <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[#ff5a00]">02 / HABITS</p>
+            <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">02 / HABITS</p>
             <h2 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl" id="habits-title">Hábitos como<br />estructura.</h2>
           </div>
           <p className="max-w-md text-sm leading-relaxed text-black/60">Una misma estructura presenta contenido distinto según sus props.</p>
         </div>
-        <div className="mt-12 grid gap-px border border-black/20 bg-black/20 md:grid-cols-2 xl:grid-cols-3">
+        <HabitForm onAdd={addHabit} />
+        <div className="mt-12 grid gap-px border border-[var(--color-border)] md:grid-cols-2 xl:grid-cols-3">
           {habits.map((habit) => (
             <Card key={habit.id} titulo={habit.titulo} descripcion={habit.descripcion} frecuencia={habit.frecuencia} completado={habit.completado} variant={habit.variant} onToggle={() => toggleHabit(habit.id)} />
           ))}
@@ -49,13 +58,13 @@ function HabitTracker() {
       <section className="py-16 sm:py-20" id="state" aria-labelledby="state-title">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
           <div>
-            <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[#ff5a00]">03 / STATE</p>
+            <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">03 / STATE</p>
             <h2 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl" id="state-title">Un estado.<br />Una respuesta.</h2>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-black/60">El estado vive en React y se transmite al componente Card.</p>
           </div>
-          <div className="grid gap-px border border-black/20 bg-black/20 lg:grid-cols-[minmax(0,1fr)_14rem]">
+          <div className="grid gap-px border border-[var(--color-border)] bg-black/20 lg:grid-cols-[minmax(0,1fr)_14rem]">
             <Card titulo={featuredHabit.titulo} descripcion={featuredHabit.descripcion} frecuencia={featuredHabit.frecuencia} completado={featuredHabit.completado} variant={featuredHabit.variant} onToggle={() => toggleHabit(featuredHabit.id)} />
-            <aside className="flex flex-col justify-between bg-[#ff5a00] p-6 sm:p-7" aria-label="Estado actual">
+            <aside className="flex flex-col justify-between bg-[var(--color-accent)] p-6 sm:p-7" aria-label="Estado actual">
               <div>
                 <p className="text-[0.6rem] font-bold tracking-[0.16em] text-black/60">CURRENT VALUE</p>
                 <p className="mt-3 text-3xl font-black tracking-[-0.07em]">{featuredHabit.completado ? 'TRUE' : 'FALSE'}</p>
