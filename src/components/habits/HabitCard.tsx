@@ -1,4 +1,5 @@
 import type { Habit } from '../../types/habit'
+import { isCompletedToday } from '../../data/dates'
 import { colorStyles, frequencyLabel } from './habitDisplay'
 
 interface HabitCardProps {
@@ -7,7 +8,7 @@ interface HabitCardProps {
 }
 
 function HabitCard({ habit, onToggle }: HabitCardProps) {
-  const completed = habit.completedToday
+  const completed = isCompletedToday(habit)
   const status = completed ? 'COMPLETADO' : 'PENDIENTE'
   const action = completed ? 'DESHACER' : 'MARCAR COMPLETADO'
 

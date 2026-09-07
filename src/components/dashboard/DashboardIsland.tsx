@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Habit } from '../../types/habit'
 import { mockHabits } from '../../data/habits.mock'
+import { isCompletedToday, todayKey, toggleDate } from '../../data/dates'
 import DailyProgress from './DailyProgress'
 import WeeklySummary from './WeeklySummary'
 import HabitGrid from '../habits/HabitGrid'
@@ -13,13 +14,14 @@ interface DashboardIslandProps {
 function DashboardIsland({ todayLabel }: DashboardIslandProps) {
   const [habits, setHabits] = useState<Habit[]>(mockHabits)
   const activeHabits = habits.filter((habit) => habit.status === 'active')
-  const completedCount = activeHabits.filter((habit) => habit.completedToday).length
+  const completedCount = activeHabits.filter((habit) => isCompletedToday(habit)).length
   const hasHabits = activeHabits.length > 0
 
   function toggleHabit(id: string) {
+    const today = todayKey()
     setHabits((currentHabits) =>
       currentHabits.map((habit) =>
-        habit.id === id ? { ...habit, completedToday: !habit.completedToday } : habit,
+        habit.id === id ? { ...habit, completedDates: toggleDate(habit.completedDates, today) } : habit,
       ),
     )
   }

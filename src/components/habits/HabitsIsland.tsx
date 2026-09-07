@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Habit } from '../../types/habit'
 import { mockHabits } from '../../data/habits.mock'
+import { todayKey, toggleDate } from '../../data/dates'
 import HabitModal, { type HabitFormData } from './HabitModal'
 import ManageHabitCard from './ManageHabitCard'
 import EmptyState from '../ui/EmptyState'
@@ -61,7 +62,9 @@ function HabitsIsland() {
           days: data.frequency === 'custom' ? [...data.days].sort() : undefined,
           color: data.color,
           status: 'active',
-          completedToday: false,
+          createdOn: todayKey(),
+          completedDates: [],
+          pausedPeriods: [],
         },
       ])
     }
@@ -69,18 +72,32 @@ function HabitsIsland() {
   }
 
   function toggleToday(id: string) {
+    const today = todayKey()
     setHabits((currentHabits) =>
       currentHabits.map((habit) =>
-        habit.id === id ? { ...habit, completedToday: !habit.completedToday } : habit,
+        habit.id === id ? { ...habit, completedDates: toggleDate(habit.completedDates, today) } : habit,
       ),
     )
   }
 
   function toggleStatus(id: string) {
+    const today = todayKey()
     setHabits((currentHabits) =>
-      currentHabits.map((habit) =>
-        habit.id === id ? { ...habit, status: habit.status === 'active' ? 'paused' : 'active' } : habit,
-      ),
+      currentHabits.map((habit) => {
+        if (habit.id !== id) {
+          return habit
+        }
+        if (habit.status === 'active') {
+          return { ...habit, status: 'paused', pausedPeriods: [...habit.pausedPeriods, { from: today, to: null }] }
+        }
+        return {
+          ...habit,
+          status: 'active',
+          pausedPeriods: habit.pausedPeriods.map((period, index) =>
+            index === habit.pausedPeriods.length - 1 && period.to === null ? { ...period, to: today } : period,
+          ),
+        }
+      }),
     )
   }
 
