@@ -1,0 +1,10 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro'
+import HabitsIsland from '../../components/habits/HabitsIsland'
+---
+
+<AppLayout title="HabitTrack — Hábitos" description="Crea y gestiona tus hábitos.">
+  <main class="mx-auto w-full max-w-[1600px] px-5 py-12 sm:px-8 sm:py-16 lg:w-[92%] lg:px-0">
+    <HabitsIsland client:load />
+  </main>
+</AppLayout>

@@ -1,0 +1,16 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro'
+import DashboardIsland from '../../components/dashboard/DashboardIsland'
+
+const todayLabel = new Date().toLocaleDateString('es-ES', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+})
+---
+
+<AppLayout title="HabitTrack — Hoy" description="Tus hábitos de hoy y tu progreso diario.">
+  <main class="mx-auto w-full max-w-[1600px] px-5 py-12 sm:px-8 sm:py-16 lg:w-[92%] lg:px-0">
+    <DashboardIsland todayLabel={todayLabel} client:load />
+  </main>
+</AppLayout>
