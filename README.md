@@ -1,67 +1,73 @@
-# HabitTrack
+# HabitTrack 2.0 — Fase 1: Productización UI/UX
 
-HabitTrack es una aplicación de seguimiento de hábitos diarios. Presenta componentes reutilizables, props tipadas y estado local de React dentro de una página Astro con diseño editorial y Tailwind CSS v4.
+HabitTrack es una aplicación personal para seguir hábitos diarios y construir constancia. Su objetivo de producto: responder en segundos qué hábitos tienes hoy, cuántos completaste y cómo evoluciona tu constancia, con una identidad editorial propia (crema, negro, naranja).
 
-## Objetivo
-
-Demostrar React, TypeScript, props, `useState`, Tailwind CSS v4, Astro y React Islands sin backend, autenticación ni almacenamiento permanente.
-
-## Stack Tecnológico
+## Stack
 
 - Astro
-- React y React Islands
+- React + React Islands
 - TypeScript estricto
 - Tailwind CSS v4 con `@tailwindcss/vite`
 - Oxlint
 - GitHub y Vercel
 
-## Arquitectura
+## Arquitectura: Astro + React Islands
 
-Astro controla la estructura de la página mediante `Layout.astro` e `index.astro`. Los componentes estáticos React se renderizan en servidor. `HabitTracker` usa `client:load` porque contiene el estado y los eventos del usuario.
+Astro controla la estructura y las rutas. Solo las pantallas con interacción usan islas React con `client:load`:
+
+- `/app` hidrata `DashboardIsland` (completar/deshacer hábitos del día).
+- `/app/habits` hidrata `HabitsIsland` (crear, editar, eliminar, pausar, completar).
+- `/`, `/login`, `/register` y `/app/progress` son esencialmente estáticas.
+
+Los layouts comparten la base `Layout.astro`: `MarketingLayout` para la zona pública y `AppLayout` (con `AppHeader` y `MobileNav`) para la zona privada. Los tipos del dominio viven en `src/types/habit.ts` y los datos temporales en `src/data/habits.mock.ts`.
+
+## Rutas
+
+```text
+/                Landing pública
+/login           Inicio de sesión (visual)
+/register        Registro (visual)
+/app             Dashboard: hábitos de hoy, progreso diario, racha y semana
+/app/habits      Gestión: listar, crear, editar, eliminar, pausar/activar
+/app/progress    Progreso: consistencia, rachas, últimos 14 días
+```
+
+No existe `/app/profile` en el MVP: el perfil es un bloque mínimo integrado en el header.
 
 ## Estructura
 
 ```text
 src/
 ├── components/
-│   ├── Button.tsx
-│   ├── Card.tsx
-│   ├── HabitForm.tsx
-│   ├── HabitTracker.tsx
-│   ├── Header.tsx
-│   ├── Hero.tsx
-│   └── UserCard.tsx
-├── layouts/
-│   └── Layout.astro
-├── pages/
-│   └── index.astro
-└── styles/
-    └── global.css
+│   ├── dashboard/    DashboardIsland, DailyProgress, WeeklySummary, ProgressSummary
+│   ├── habits/       HabitsIsland, HabitModal, HabitCard, HabitGrid, ManageHabitCard
+│   ├── navigation/   AppHeader, MobileNav
+│   └── ui/           EmptyState, ConfirmDialog
+├── data/             habits.mock.ts (mock temporal)
+├── layouts/          Layout, MarketingLayout, AppLayout
+├── pages/            index, login, register, app/
+├── styles/           global.css (tokens: crema, negro, naranja)
+└── types/            habit.ts (Habit, HabitColor, HabitFrequency, HabitStatus)
 ```
 
-## Componentes y TypeScript
+## Estado actual: Fase 1 completada
 
-- `Header` y `Hero` son componentes React estáticos.
-- `UserCard` recibe `nombre` y `objetivo` mediante `UserCardProps`.
-- `Card` recibe las props de cada hábito y usa `HabitVariant` (`blue`, `orange`, `green`).
-- `Button` recibe texto y callback tipados.
-- `HabitForm` recibe `HabitFormProps` y usa `HabitFormValues` para añadir hábitos.
+- Landing pública real con hero, cómo funciona, ejemplo visual y CTA.
+- Dashboard funcional con estado local: completar/deshacer, progreso diario, resumen semanal.
+- Gestión completa de hábitos con modal único de crear/editar y confirmación propia de eliminado.
+- Progreso con datos ilustrativos y navegación desktop + móvil con estado activo.
 
-`HabitTracker` administra un único `useState<Habit[]>`. El contador y el porcentaje de progreso se derivan de ese estado. Los toggles y los nuevos hábitos actualizan el array de forma inmutable.
+## Limitaciones actuales
 
-## React Islands
+- Datos mock en memoria (`src/data/habits.mock.ts`): al navegar entre rutas el estado se reinicia.
+- Sin persistencia, sin autenticación real, sin backend.
+- Rachas e historial de progreso son valores ilustrativos, no cálculos reales.
 
-`src/pages/index.astro` hidrata únicamente:
+## Próximos pasos
 
-```astro
-<HabitTracker client:load />
-```
-
-`Header`, `Hero` y `UserCard` se renderizan sin una directiva `client:*`.
-
-## Estilos
-
-Tailwind CSS v4 es el motor principal. `src/styles/global.css` define las variables `--color-background`, `--color-surface`, `--color-text`, `--color-muted`, `--color-accent` y `--color-border` para mantener la identidad visual.
+- Supabase: Auth, PostgreSQL y persistencia real.
+- Estadísticas reales calculadas desde el historial.
+- Sincronización del estado entre rutas mediante la capa de datos.
 
 ## Comandos
 
@@ -76,10 +82,4 @@ npm run preview
 
 ## Git Workflow
 
-- `feature/habittrack-ui` se integró mediante Pull Request #1.
-- `feature/astro-integration` se integró mediante Pull Request #2.
-- `feature/final-compliance` reúne los ajustes finales de cumplimiento técnico.
-
-## Despliegue
-
-El proyecto utiliza GitHub para el flujo de código y Vercel para el despliegue.
+- `feature/productization-ui` concentra la Fase 1: base de arquitectura, landing, app shell, dashboard, gestión de hábitos y progreso.

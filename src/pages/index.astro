@@ -1,33 +1,107 @@
 ---
-import Header from '../components/Header'
-import Hero from '../components/Hero'
-import UserCard from '../components/UserCard'
-import HabitTracker from '../components/HabitTracker'
-import Layout from '../layouts/Layout.astro'
+import Layout from '../layouts/MarketingLayout.astro'
 ---
 
-<Layout title="HabitTrack" description="Seguimiento de hábitos construido con Astro, React, TypeScript y Tailwind CSS.">
-    <div class="min-h-screen bg-[var(--color-background)] font-sans text-[var(--color-text)]">
-      <Header />
-      <main class="mx-auto w-full max-w-[1600px] px-5 sm:px-8 lg:w-[92%] lg:px-0" id="today">
-        <Hero description="Un espacio visual para seguir hábitos, props y estado desde una interfaz simple." />
-        <section class="grid gap-8 border-b border-black/15 py-16 sm:py-20 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)] lg:gap-16" id="user" aria-labelledby="user-title">
-          <div>
-            <p class="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">01 / USER</p>
-            <h2 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl" id="user-title">Perfil enviado<br />por props.</h2>
-          </div>
-          <div>
-            <p class="mb-7 max-w-md text-sm leading-relaxed text-black/60">Datos enviados a un componente reutilizable mediante props.</p>
-            <UserCard nombre="Carlos Cerda" objetivo="Construir mejores hábitos" />
-          </div>
-        </section>
-        <div class="pb-20">
-          <HabitTracker client:load />
+<Layout title="HabitTrack — Construye constancia" description="Organiza tus hábitos diarios, registra tu progreso y construye constancia con HabitTrack.">
+  <main class="mx-auto w-full max-w-[1600px] px-5 sm:px-8 lg:w-[92%] lg:px-0">
+    <section class="grid items-end gap-10 border-b border-[var(--color-border)] py-14 sm:py-20 lg:grid-cols-[1fr_24rem] lg:gap-16" aria-labelledby="hero-title">
+      <div>
+        <p class="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">HÁBITOS DIARIOS / CONSTANCIA</p>
+        <h1 class="mt-7 text-[clamp(5rem,16vw,13rem)] font-black leading-[0.72] tracking-[-0.09em]" id="hero-title">HABIT<br /><span class="text-[var(--color-accent)]">TRACK.</span></h1>
+      </div>
+      <div class="max-w-xs border-l border-black/25 pl-5">
+        <p class="text-sm leading-relaxed text-black/65">HabitTrack te ayuda a construir constancia siguiendo tus hábitos diarios de forma simple.</p>
+        <div class="mt-6 flex flex-col gap-3">
+          <a class="bg-black px-4 py-3 text-center text-[0.65rem] font-bold tracking-[0.14em] text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]" href="/register">EMPEZAR AHORA</a>
+          <a class="border border-black/25 px-4 py-3 text-center text-[0.65rem] font-bold tracking-[0.14em] text-black transition-colors hover:border-black hover:text-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]" href="/login">INICIAR SESIÓN</a>
         </div>
-        <footer class="flex flex-col gap-2 border-t border-black/15 py-7 text-[0.65rem] font-bold tracking-[0.16em] text-black/50 sm:flex-row sm:justify-between">
-          <span>HABITTRACK / 2026</span>
-          <span>REACT / TYPESCRIPT / TAILWIND</span>
-        </footer>
-      </main>
-    </div>
+      </div>
+    </section>
+    <section class="border-b border-black/15 py-16 sm:py-20" aria-labelledby="how-title">
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)] lg:gap-16">
+        <div>
+          <p class="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">CÓMO FUNCIONA</p>
+          <h2 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl" id="how-title">Tres pasos.<br />Nada más.</h2>
+        </div>
+        <div class="grid gap-px border border-[var(--color-border)] bg-black/20 sm:grid-cols-3">
+          <div class="bg-[var(--color-surface)] p-6 sm:p-7">
+            <p class="text-[0.6rem] font-bold tracking-[0.16em] text-black/50">01</p>
+            <h3 class="mt-8 text-2xl font-black tracking-[-0.06em]">CREA</h3>
+            <p class="mt-3 text-sm leading-relaxed text-black/60">Define los hábitos que quieres seguir cada día.</p>
+          </div>
+          <div class="bg-[var(--color-surface)] p-6 sm:p-7">
+            <p class="text-[0.6rem] font-bold tracking-[0.16em] text-black/50">02</p>
+            <h3 class="mt-8 text-2xl font-black tracking-[-0.06em]">MARCA</h3>
+            <p class="mt-3 text-sm leading-relaxed text-black/60">Registra cada hábito completado al terminar tu día.</p>
+          </div>
+          <div class="bg-[var(--color-surface)] p-6 sm:p-7">
+            <p class="text-[0.6rem] font-bold tracking-[0.16em] text-black/50">03</p>
+            <h3 class="mt-8 text-2xl font-black tracking-[-0.06em]">MANTÉN CONSTANCIA</h3>
+            <p class="mt-3 text-sm leading-relaxed text-black/60">Observa tu racha y tu progreso semana a semana.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="border-b border-black/15 py-16 sm:py-20" aria-labelledby="example-title">
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)] lg:gap-16">
+        <div>
+          <p class="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">EJEMPLO</p>
+          <h2 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl" id="example-title">Así se ve<br />un día real.</h2>
+          <p class="mt-5 max-w-xs text-sm leading-relaxed text-black/60">Tres hábitos, dos completados. Progreso de hoy: 67%.</p>
+        </div>
+        <div>
+          <div class="flex flex-col justify-between border border-[var(--color-border)] bg-black p-6 text-white sm:flex-row sm:items-center sm:p-7">
+            <p class="text-[0.6rem] font-bold tracking-[0.16em] text-white/60">HOY / 2 DE 3</p>
+            <p class="mt-2 text-3xl font-black tracking-[-0.07em] sm:mt-0">67%</p>
+          </div>
+          <div class="grid gap-px border border-t-0 border-[var(--color-border)] bg-black/20 md:grid-cols-3">
+            <article class="bg-[var(--color-surface)] p-6">
+              <div class="flex items-center justify-between gap-3 text-[0.6rem] font-bold tracking-[0.16em]">
+                <span class="text-black/50">DIARIO</span>
+                <span class="flex items-center gap-1.5 text-[var(--color-accent)]"><span aria-hidden="true" class="size-1.5 rounded-full bg-[var(--color-accent)]"></span>COMPLETADO</span>
+              </div>
+              <div class="mt-10 flex items-center gap-2.5">
+                <span aria-hidden="true" class="size-2 rounded-full bg-[#3478f6]"></span>
+                <h3 class="text-xl font-black tracking-[-0.06em]">HIDRATACIÓN</h3>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed text-black/60">Tomar 2 litros de agua.</p>
+            </article>
+            <article class="bg-[var(--color-surface)] p-6">
+              <div class="flex items-center justify-between gap-3 text-[0.6rem] font-bold tracking-[0.16em]">
+                <span class="text-black/50">LUN — VIE</span>
+                <span class="flex items-center gap-1.5 text-[var(--color-accent)]"><span aria-hidden="true" class="size-1.5 rounded-full bg-[var(--color-accent)]"></span>COMPLETADO</span>
+              </div>
+              <div class="mt-10 flex items-center gap-2.5">
+                <span aria-hidden="true" class="size-2 rounded-full bg-[var(--color-accent)]"></span>
+                <h3 class="text-xl font-black tracking-[-0.06em]">ESTUDIO</h3>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed text-black/60">Estudiar desarrollo web 45 minutos.</p>
+            </article>
+            <article class="bg-[var(--color-surface)] p-6">
+              <div class="flex items-center justify-between gap-3 text-[0.6rem] font-bold tracking-[0.16em]">
+                <span class="text-black/50">5 DÍAS</span>
+                <span class="flex items-center gap-1.5 text-black/45"><span aria-hidden="true" class="size-1.5 rounded-full bg-[#2f9d62]"></span>PENDIENTE</span>
+              </div>
+              <div class="mt-10 flex items-center gap-2.5">
+                <span aria-hidden="true" class="size-2 rounded-full bg-[#2f9d62]"></span>
+                <h3 class="text-xl font-black tracking-[-0.06em]">EJERCICIO</h3>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed text-black/60">Entrenamiento en el gimnasio.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="grid gap-8 py-16 sm:py-20 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16" aria-labelledby="cta-title">
+      <h2 class="text-4xl font-black tracking-[-0.06em] sm:text-6xl" id="cta-title">La constancia<br />se <span class="text-[var(--color-accent)]">construye.</span></h2>
+      <div class="flex flex-col justify-end">
+        <p class="max-w-md text-sm leading-relaxed text-black/60">Empieza con tu primer hábito hoy y sigue tu progreso día a día.</p>
+        <a class="mt-6 bg-black px-4 py-3 text-center text-[0.65rem] font-bold tracking-[0.14em] text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] sm:w-auto sm:self-start sm:px-10" href="/register">EMPEZAR AHORA</a>
+      </div>
+    </section>
+    <footer class="flex flex-col gap-2 border-t border-black/15 py-7 text-[0.65rem] font-bold tracking-[0.16em] text-black/50 sm:flex-row sm:justify-between">
+      <span>HABITTRACK / 2026</span>
+      <span>HÁBITOS / CONSTANCIA / PROGRESO</span>
+    </footer>
+  </main>
 </Layout>

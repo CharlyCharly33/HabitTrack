@@ -1,0 +1,23 @@
+---
+import Layout from './Layout.astro'
+import AppHeader from '../components/navigation/AppHeader'
+import MobileNav from '../components/navigation/MobileNav'
+
+interface Props {
+  title: string
+  description?: string
+}
+
+const { title, description } = Astro.props
+const current = Astro.url.pathname.replace(/\/$/, '') || '/app'
+---
+
+<Layout title={title} description={description}>
+  <div class="min-h-screen bg-[var(--color-background)] font-sans text-[var(--color-text)]">
+    <AppHeader current={current} />
+    <div class="pb-20 md:pb-0">
+      <slot />
+    </div>
+    <MobileNav current={current} />
+  </div>
+</Layout>
