@@ -4,6 +4,11 @@ export type HabitFrequency = 'daily' | 'weekdays' | 'custom'
 
 export type HabitStatus = 'active' | 'paused'
 
+export interface PausedPeriod {
+  from: string
+  to: string | null
+}
+
 export interface Habit {
   id: string
   title: string
@@ -12,5 +17,7 @@ export interface Habit {
   days?: number[]
   color: HabitColor
   status: HabitStatus
-  completedToday: boolean
+  createdOn: string
+  completedDates: string[]
+  pausedPeriods: PausedPeriod[]
 }

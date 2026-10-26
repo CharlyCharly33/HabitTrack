@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import type { Habit } from '../../types/habit'
-import { mockHabits } from '../../data/habits.mock'
+import { useHabits } from '../../hooks/useHabits'
 import HabitModal, { type HabitFormData } from './HabitModal'
 import ManageHabitCard from './ManageHabitCard'
 import EmptyState from '../ui/EmptyState'
@@ -19,15 +18,19 @@ const emptyForm: HabitFormData = {
   color: 'orange',
 }
 
-function newHabitId(): string {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return crypto.randomUUID()
-  }
-  return `habit-${Math.random().toString(36).slice(2)}`
-}
-
 function HabitsIsland() {
-  const [habits, setHabits] = useState<Habit[]>(mockHabits)
+  const {
+    habits,
+    isLoading,
+    loadError,
+    actionError,
+    refresh,
+    createHabit,
+    updateHabit,
+    removeHabit,
+    toggleHabitToday,
+    setHabitStatus,
+  } = useHabits()
   const [modal, setModal] = useState<ModalState | null>(null)
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
@@ -40,56 +43,94 @@ function HabitsIsland() {
     setModal(null)
   }
 
-  function saveHabit(data: HabitFormData) {
-    if (modal?.mode === 'edit' && modal.habitId) {
-      const habitId = modal.habitId
-      setHabits((currentHabits) =>
-        currentHabits.map((habit) =>
-          habit.id === habitId
-            ? { ...habit, title: data.title, description: data.description || undefined, frequency: data.frequency, days: data.frequency === 'custom' ? [...data.days].sort() : undefined, color: data.color }
-            : habit,
-        ),
-      )
-    } else {
-      setHabits((currentHabits) => [
-        ...currentHabits,
-        {
-          id: newHabitId(),
+  async function saveHabit(data: HabitFormData) {
+    try {
+      if (modal?.mode === 'edit' && modal.habitId) {
+        await updateHabit(modal.habitId, {
           title: data.title,
-          description: data.description || undefined,
+          description: data.description,
           frequency: data.frequency,
-          days: data.frequency === 'custom' ? [...data.days].sort() : undefined,
+          days: data.days,
           color: data.color,
-          status: 'active',
-          completedToday: false,
-        },
-      ])
+        })
+      } else {
+        await createHabit({
+          title: data.title,
+          description: data.description,
+          frequency: data.frequency,
+          days: data.days,
+          color: data.color,
+        })
+      }
+      closeModal()
+    } catch {
+      // El error queda expuesto en actionError sin cerrar el modal.
     }
-    closeModal()
   }
 
-  function toggleToday(id: string) {
-    setHabits((currentHabits) =>
-      currentHabits.map((habit) =>
-        habit.id === id ? { ...habit, completedToday: !habit.completedToday } : habit,
-      ),
-    )
+  async function toggleToday(id: string) {
+    try {
+      await toggleHabitToday(id)
+    } catch {
+      // El error queda expuesto en actionError.
+    }
   }
 
-  function toggleStatus(id: string) {
-    setHabits((currentHabits) =>
-      currentHabits.map((habit) =>
-        habit.id === id ? { ...habit, status: habit.status === 'active' ? 'paused' : 'active' } : habit,
-      ),
-    )
+  async function toggleStatus(id: string) {
+    const habit = habits.find((entry) => entry.id === id)
+    if (!habit) {
+      return
+    }
+    try {
+      await setHabitStatus(id, habit.status === 'active' ? 'paused' : 'active')
+    } catch {
+      // El error queda expuesto en actionError.
+    }
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     if (deleteId) {
-      const id = deleteId
-      setHabits((currentHabits) => currentHabits.filter((habit) => habit.id !== id))
+      try {
+        await removeHabit(deleteId)
+      } catch {
+        return
+      }
     }
     setDeleteId(null)
+  }
+
+  if (isLoading) {
+    return (
+      <div>
+        <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">HÁBITOS</p>
+        <h1 className="mt-4 text-4xl font-black tracking-[-0.06em] sm:text-6xl">Tus hábitos.</h1>
+        <p className="mt-8 text-[0.65rem] font-bold tracking-[0.16em] text-black/55" role="status">
+          CARGANDO TUS HÁBITOS…
+        </p>
+      </div>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <div>
+        <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[var(--color-accent)]">HÁBITOS</p>
+        <h1 className="mt-4 text-4xl font-black tracking-[-0.06em] sm:text-6xl">Tus hábitos.</h1>
+        <div className="mt-8 border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8" role="alert">
+          <p className="text-[0.65rem] font-bold tracking-[0.16em] text-black/55">NO SE PUDO CARGAR</p>
+          <p className="mt-3 text-sm leading-relaxed text-black/60">{loadError}</p>
+          <button
+            className="mt-5 bg-black px-6 py-3 text-[0.65rem] font-bold tracking-[0.14em] text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]"
+            type="button"
+            onClick={() => {
+              void refresh()
+            }}
+          >
+            REINTENTAR
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -109,6 +150,11 @@ function HabitsIsland() {
           + NUEVO HÁBITO
         </button>
       </div>
+      {actionError && (
+        <p className="mt-4 border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm text-black/60" role="alert">
+          {actionError}
+        </p>
+      )}
       <div className="mt-8">
         {habits.length === 0 ? (
           <EmptyState
@@ -123,9 +169,9 @@ function HabitsIsland() {
               <ManageHabitCard
                 key={habit.id}
                 habit={habit}
-                onToggleToday={() => toggleToday(habit.id)}
+                onToggleToday={() => void toggleToday(habit.id)}
                 onEdit={() => setModal({ mode: 'edit', habitId: habit.id })}
-                onToggleStatus={() => toggleStatus(habit.id)}
+                onToggleStatus={() => void toggleStatus(habit.id)}
                 onDelete={() => setDeleteId(habit.id)}
               />
             ))}
@@ -148,7 +194,7 @@ function HabitsIsland() {
               : emptyForm
           }
           onClose={closeModal}
-          onSave={saveHabit}
+          onSave={(data) => void saveHabit(data)}
         />
       )}
       {habitToDelete && (
@@ -158,7 +204,7 @@ function HabitsIsland() {
           cancelLabel="CANCELAR"
           confirmLabel="ELIMINAR"
           onCancel={() => setDeleteId(null)}
-          onConfirm={confirmDelete}
+          onConfirm={() => void confirmDelete()}
         />
       )}
     </div>

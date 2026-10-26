@@ -1,7 +1,9 @@
 import type { Habit } from '../types/habit'
+import { todayKey } from './dates'
 
-// Mock temporal para Fase 1. Sin persistencia, sin backend.
-// Migra los 3 hábitos de la demo actual al nuevo modelo Habit.
+// Semilla temporal para el store de Fase 2. Sin persistencia propia ni backend.
+// Los 3 hábitos de la demo en el nuevo modelo: historial vacío, creados hoy,
+// sin pausas. El store los sembrará una sola vez cuando el storage esté vacío.
 export const mockHabits: Habit[] = [
   {
     id: 'habit-water',
@@ -10,7 +12,9 @@ export const mockHabits: Habit[] = [
     frequency: 'daily',
     color: 'blue',
     status: 'active',
-    completedToday: false,
+    createdOn: todayKey(),
+    completedDates: [],
+    pausedPeriods: [],
   },
   {
     id: 'habit-study',
@@ -20,7 +24,9 @@ export const mockHabits: Habit[] = [
     days: [1, 2, 3, 4, 5],
     color: 'orange',
     status: 'active',
-    completedToday: false,
+    createdOn: todayKey(),
+    completedDates: [],
+    pausedPeriods: [],
   },
   {
     id: 'habit-workout',
@@ -30,6 +36,8 @@ export const mockHabits: Habit[] = [
     days: [1, 2, 3, 4, 5],
     color: 'green',
     status: 'active',
-    completedToday: false,
+    createdOn: todayKey(),
+    completedDates: [],
+    pausedPeriods: [],
   },
 ]
