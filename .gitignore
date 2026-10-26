@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Variables locales; solo se versiona la plantilla sin credenciales.
+.env
+.env.*
+!.env.example
+
 # Astro
 .astro/
 

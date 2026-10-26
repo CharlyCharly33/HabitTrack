@@ -59,8 +59,8 @@ src/
 
 ## Limitaciones actuales
 
-- Datos mock en memoria (`src/data/habits.mock.ts`): al navegar entre rutas el estado se reinicia.
-- Sin persistencia, sin autenticación real, sin backend.
+- Persistencia local mediante `src/data/habitStore.ts` y `src/hooks/useHabits.ts`; todavía sin sincronización remota.
+- Sin autenticación real ni backend conectado a los hábitos.
 - Rachas e historial de progreso son valores ilustrativos, no cálculos reales.
 
 ## Próximos pasos
@@ -70,6 +70,33 @@ src/
 - Sincronización del estado entre rutas mediante la capa de datos.
 
 ## Comandos
+
+### Supabase: foundation
+
+La base técnica usa `@supabase/supabase-js` y el cliente reutilizable de
+`src/lib/supabase/client.ts`. Aún no hay tablas, autenticación ni persistencia
+remota: los hábitos siguen guardándose en **localStorage** mediante
+`src/data/habitStore.ts` y `src/hooks/useHabits.ts`.
+
+Para preparar la configuración local, copia `.env.example` a `.env` y reemplaza
+los placeholders:
+
+- `PUBLIC_SUPABASE_URL`: URL de tu proyecto Supabase.
+- `PUBLIC_SUPABASE_PUBLISHABLE_KEY`: clave pública publishable del proyecto (`sb_publishable_...`). Las claves secret/service_role están prohibidas en frontend.
+
+`.env` está ignorado por Git. Las variables `PUBLIC_*` son visibles en el navegador;
+no deben contener secretos. Reinicia el servidor de desarrollo después de cambiarlas.
+En un despliegue estático se configuran antes de compilar.
+
+El cliente valida ambas variables al importar el módulo y lanza un error claro
+si faltan o conservan los placeholders. La UI todavía no lo importa, por lo que
+el build actual no requiere credenciales. Las sesiones persistentes, la renovación
+de tokens y la detección de callbacks están desactivadas en esta fase.
+
+Validación mínima: `npm run check` comprueba el tipado del módulo y la importación
+del SDK; `npm run lint` y `npm run build` verifican la integración técnica.
+Estas comprobaciones no validan credenciales ni conectividad con un proyecto remoto
+y no realizan consultas a tablas.
 
 ```bash
 npm install
